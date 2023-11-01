@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Drink & Dine</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="apple-touch-icon" href="assets/img/apple-icon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="assets/img/apple-icon.png">
+
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/templatemo.css">
+    <link rel="stylesheet" href="assets/css/custom.css">
+
+    <!-- Load fonts style after rendering the layout styles -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
+    <link rel="stylesheet" href="assets/css/fontawesome.min.css">
+</head>
+
+<body>
+
+
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-light shadow">
+        <div class="container d-flex justify-content-between align-items-center">
+
+            <a class="navbar-brand text-success logo h1 align-self-center" href="index.html">
+                Drink & Dine
+            </a>
+
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
+                data-bs-target="#templatemo_main_nav" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="align-self-center collapse navbar-collapse flex-fill  d-lg-flex justify-content-lg-between"
+                id="templatemo_main_nav">
+                <div class="flex-fill">
+                    <ul class="nav navbar-nav d-flex justify-content-between mx-lg-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">Начало</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="about.html">За нас</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="shop.html">Абонаменти</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="contact.html">Контакти</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="navbar align-self-center d-flex">
+                    <div class="d-lg-none flex-sm-fill mt-3 mb-4 col-7 col-sm-auto pr-3">
+
+                    </div>
+
+                    <a id="cartIcon" class="nav-icon position-relative text-decoration-none" href="#">
+                        <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
+                        <span id="cartItemCount"
+                            class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">0</span>
+                    </a>
+
+                    <a class="nav-icon position-relative text-decoration-none" href="profile.html">
+                        <i class="fa fa-fw fa-user text-dark mr-3"></i>
+                        <span
+                            class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark"></span>
+                    </a>
+                </div>
+
+
+
+
+
+                <div id="cart" class="cart">
+                    <a id="closeCart" class="close-icon" onclick="closeCart()"><i class="fa fa-times"></i></a>
+                    <div class="cart-content">
+                        <ul id="cartItemsList">
+                            <!-- Тук ще се показват добавените продукти -->
+                        </ul>
+                    </div>
+                </div>
+
+
+
+                <style>
+                    .cart {
+                        position: fixed;
+                        top: 0;
+                        right: -300px;
+                        /* Започнете с отрицателна стойност, за да скриете количката изначално */
+                        height: 100%;
+                        background-color: #fff;
+                        transition: right 0.5s;
+                        /* Добавете анимация на изскачане на дясно */
+                        z-index: 1;
+                        width: 300px;
+                        /* Ширина на количката */
+                        overflow-y: auto;
+                        /* Добавете прокрутка, ако съдържанието на количката е по-голямо */
+                    }
+
+                    .cart-content {
+                        padding: 20px;
+                    }
+
+                    .close-icon {
+                        position: absolute;
+                        top: 10px;
+                        right: 10px;
+                        cursor: pointer;
+                        font-size: 20px;
+                    }
+                </style>
+
+                <script>
+                    // Променливи за елементите на страницата
+                    const cartIcon = document.getElementById("cartIcon");
+                    const closeCartButton = document.getElementById("closeCart");
+                    const cartItemsList = document.getElementById("cartItemsList");
+                    const cartItemCount = document.getElementById("cartItemCount");
+
+                    // Променливи за състоянието на количката
+                    let isCartOpen = false;
+                    let cartCount = 0;
+
+                    // Добавяне на слушатели за събития
+                    cartIcon.addEventListener("click", toggleCart);
+                    closeCartButton.addEventListener("click", closeCart);
+
+                    // Функция за отваряне и затваряне на количката
+                    function toggleCart() {
+                        if (isCartOpen) {
+                            closeCart();
+                        } else {
+                            openCart();
+                        }
+                    }
+
+                    // Функция за отваряне на количката
+                    function openCart() {
+                        cart.style.right = "0";
+                        isCartOpen = true;
+                    }
+
+                    // Функция за затваряне на количката
+                    function closeCart() {
+                        cart.style.right = "-300px";
+                        isCartOpen = false;
+                    }
+
+                    // Функция за добавяне на продукт в количката
+                    function addToCart(productName) {
+                        const cartItem = document.createElement("li");
+                        cartItem.textContent = productName;
+                        cartItemsList.appendChild(cartItem);
+                        cartCount++; 
+                        updateCartCount();
+                    }
+
+                    // Функция за премахване на продукт от количката
+                    function removeFromCart(productName) {
+                        const cartItems = cartItemsList.getElementsByTagName("li");
+                        for (let i = 0; i < cartItems.length; i++) {
+                            if (cartItems[i].textContent === productName) {
+                                cartItemsList.removeChild(cartItems[i]);
+                                cartCount--;
+                                updateCartCount();
+                                break;
+                            }
+                        }
+                    }
+
+                    // Функция за актуализиране на брояча на продуктите
+                    function updateCartCount() {
+                        cartCount = Math.max(cartCount, 0); // Не позволявайте отрицателен брой
+                        cartCount = Math.min(cartCount, 99); // Ограничете броя на двуцифрено число
+                        cartItemCount.textContent = cartCount;
+                    }
+
+                </script>
+
+
+
+            </div>
+
+        </div>
+    </nav>
+    <!-- Close Header -->
+
+    <!-- Modal -->
+    <div class="modal fade bg-white" id="templatemo_search" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="w-100 pt-1 mb-5 text-right">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="" method="get" class="modal-content modal-body border-0 p-0">
+                <div class="input-group mb-2">
+                    <input type="text" class="form-control" id="inputModalSearch" name="q" placeholder="Search ...">
+                    <button type="submit" class="input-group-text bg-success text-light">
+                        <i class="fa fa-fw fa-search text-white"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+    <!-- Start Banner Hero -->
+    <div id="template-mo-zay-hero-carousel" class="carousel slide" data-bs-ride="carousel">
+        <ol class="carousel-indicators">
+            <li data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide-to="0" class="active"></li>
+            <li data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide-to="1"></li>
+            <li data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide-to="2"></li>
+        </ol>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <div class="container">
+                    <div class="row p-5">
+                        <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
+                            <img class="img-fluid" src="./assets/img/background 01.png" alt="">
+                        </div>
+                        <div class="col-lg-6 mb-0 d-flex align-items-center">
+                            <div class="text-align-left align-self-center">
+                                <h1 class="h1 text-success"><b>Drink</b> & Dine</h1>
+                                <h3 class="h2">Добре дошли</h3>
+                                <p>
+                                    Ние вярваме, че всеки момент може да стане специален с чаша вино и изискана храна.
+                                    Нашата мисия е да ви предоставим най-доброто вино и удоволствие от храна,
+                                    представени чрез нашите персонализирани абонаменти. Независимо дали искате да
+                                    изненадате специален човек или да си подарите няколко момента на удоволствие, Drink
+                                    & Dine Абонаменти е вашето решение.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="container">
+                    <div class="row p-5">
+                        <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
+                            <img class="img-fluid" src="./assets/img/background 02.png" alt="">
+                        </div>
+                        <div class="col-lg-6 mb-0 d-flex align-items-center">
+                            <div class="text-align-left">
+                                <h1 class="h1">Абонаменти</h1>
+                                <h3 class="h2">Благообразие от Вкусове: Drink & Dine</h3>
+                                <p>
+                                    Drink & Dine Абонаменти предоставя перфектното съчетание на алкохол и кулинарни
+                                    изкушения. Изберете своя абонамент и се погрижете за вкусовете, които ви изкушават -
+                                    от уиски и ром до вкусен вечерен коктейл. Нека вкусовете бъдат винаги с вас, заедно
+                                    с най-добрата селекция от храна, предлагана от нас. С Drink & Dine Абонаменти, всяка
+                                    вечер става незабравима и специална.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="container">
+                    <div class="row p-5">
+                        <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
+                            <img class="img-fluid" src="./assets/img/background 03.png" alt="">
+                        </div>
+                        <div class="col-lg-6 mb-0 d-flex align-items-center">
+                            <div class="text-align-left">
+                                <h1 class="h1">Удобство и вкус в дома Ви</h1>
+                                <h3 class="h2"></h3>
+                                <p>
+                                    Придобийте спокойствие с нашите доставки. С Drink & Dine Абонаменти, ние ви
+                                    доставяме не само алкохол и храна, но и удоволствие във вашия дом. Нашият екип
+                                    гарантира своевременна и сигурна доставка, така че вие можете да се насладите на
+                                    вкусовете без грижи. Разкошът и комфорта на изисканите сесии са само на едно
+                                    повикване разстояние.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a class="carousel-control-prev text-decoration-none w-auto ps-3" href="#template-mo-zay-hero-carousel"
+            role="button" data-bs-slide="prev">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        <a class="carousel-control-next text-decoration-none w-auto pe-3" href="#template-mo-zay-hero-carousel"
+            role="button" data-bs-slide="next">
+            <i class="fas fa-chevron-right"></i>
+        </a>
+    </div>
+    <!-- End Banner Hero -->
+
+
+    <!-- Start Categories of The Month -->
+    <section class="container py-5">
+        <div class="row text-center pt-3">
+            <div class="col-lg-6 m-auto">
+                <h1 class="h1">Абонаменти</h1>
+                <p>
+                    Зарадвайте себе си или обичания човек този вечер с нашите изненадващи абонаменти за специално подбран алкохол и храна.
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-4 p-5 mt-3">
+                <a href="#"><img src="./assets/img/category_img_01.png" class="rounded-circle img-fluid border"></a>
+                <h5 class="text-center mt-3 mb-3">Нашите готови абонаменти</h5>
+                <p class="text-center"><a class="btn btn-success">Разгледай</a></p>
+            </div>
+            <div class="col-12 col-md-4 p-5 mt-3">
+                <a href="#"><img src="./assets/img/category_img_02.jpg" class="rounded-circle img-fluid border"></a>
+                <h2 class="h5 text-center mt-3 mb-3">Изпробвай абонамент</h2>
+                <p class="text-center"><a class="btn btn-success">Разгледай</a></p>
+            </div>
+            <div class="col-12 col-md-4 p-5 mt-3">
+                <a href="#"><img src="./assets/img/category_img_03.jpg" class="rounded-circle img-fluid border"></a>
+                <h2 class="h5 text-center mt-3 mb-3">Направи абонамент по свой вкус</h2>
+                <p class="text-center"><a class="btn btn-success">Разгледай</a></p>
+            </div>
+        </div>
+    </section>
+    <!-- End Categories of The Month -->
+
+
+
+
+
+    <!-- Start Footer -->
+    <footer class="bg-dark" id="tempaltemo_footer">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-md-4 pt-5">
+                    <h2 class="h2 text-success border-bottom pb-3 border-light logo">Drink & Dine</h2>
+                    <ul class="list-unstyled text-light footer-link-list">
+                        <li>
+                            <i class="fas fa-map-marker-alt fa-fw"></i>
+                            Sofia, Bulgaria
+                        </li>
+                        <li>
+                            <i class="fa fa-phone fa-fw"></i>
+                            <a class="text-decoration-none" href="tel:+359878485500">0878485500</a>
+                        </li>
+                        <li>
+                            <i class="fa fa-envelope fa-fw"></i>
+                            <a class="text-decoration-none" href="mailto:info@company.com">TBD</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-md-4 pt-5">
+                    <h2 class="h2 text-light border-bottom pb-3 border-light">Абонаменти</h2>
+                    <ul class="list-unstyled text-light footer-link-list">
+                        <li><a class="text-decoration-none" href="#">Готови абонаменти</a></li>
+                        <li><a class="text-decoration-none" href="#">Направете абонамент по свой вкус</a></li>
+                        <li><a class="text-decoration-none" href="#">Искате да пробвате? Няма проблем. Вижте как тук.</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-md-4 pt-5">
+                    <h2 class="h2 text-light border-bottom pb-3 border-light">Информация и контакти</h2>
+                    <ul class="list-unstyled text-light footer-link-list">
+                        <li><a class="text-decoration-none" href="#">За нас</a></li>
+                        <li><a class="text-decoration-none" href="#">Контакти</a></li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="row text-light mb-4">
+                <div class="col-12 mb-3">
+                    <div class="w-100 my-3 border-top border-light"></div>
+                </div>
+                <div class="col-auto me-auto">
+                    <ul class="list-inline text-left footer-icons">
+                        <li class="list-inline-item border border-light rounded-circle text-center">
+                            <a class="text-light text-decoration-none" target="_blank" href="http://facebook.com/"><i
+                                    class="fab fa-facebook-f fa-lg fa-fw"></i></a>
+                        </li>
+                        <li class="list-inline-item border border-light rounded-circle text-center">
+                            <a class="text-light text-decoration-none" target="_blank"
+                                href="https://www.instagram.com/"><i class="fab fa-instagram fa-lg fa-fw"></i></a>
+                        </li>
+                        <li class="list-inline-item border border-light rounded-circle text-center">
+                            <a class="text-light text-decoration-none" target="_blank" href="https://twitter.com/"><i
+                                    class="fab fa-twitter fa-lg fa-fw"></i></a>
+                        </li>
+                        <li class="list-inline-item border border-light rounded-circle text-center">
+                            <a class="text-light text-decoration-none" target="_blank"
+                                href="https://www.linkedin.com/"><i class="fab fa-linkedin fa-lg fa-fw"></i></a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-auto">
+                    <label class="sr-only" for="subscribeEmail">Email address</label>
+                    <div class="input-group mb-2">
+                        <input type="text" class="form-control bg-dark border-light" id="subscribeEmail"
+                            placeholder="Email address">
+                        <div class="input-group-text btn-success text-light">Subscribe</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-100 bg-black py-3">
+            <div class="container">
+                <div class="row pt-2">
+                    <div class="col-12">
+                        <p class="text-left text-light">
+                            Copyright &copy; 2023 Drink & Dine
+                            | Designed by <a rel="sponsored" href="https://instagram.com/hristomitov"
+                                target="_blank">Hristo Mitov</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </footer>
+    <!-- End Footer -->
+
+    <!-- Start Script -->
+    <script src="assets/js/jquery-1.11.0.min.js"></script>
+    <script src="assets/js/jquery-migrate-1.2.1.min.js"></script>
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/templatemo.js"></script>
+    <script src="assets/js/custom.js"></script>
+    <!-- End Script -->
+</body>
+
+</html>
